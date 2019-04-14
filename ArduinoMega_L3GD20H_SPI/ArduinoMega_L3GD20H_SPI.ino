@@ -38,12 +38,14 @@ double deg_x = 0;
 double deg_y = 0;
 double deg_z = 0;
 
+const double drift[3] = { -0.0163681, 4.55715, -0.6529};
+const double drift_2[3] = { -0.016952, 0.373748, -0.057698};
 
 void flash() {
   gyro.read();
-  deg_x += gyro.data.x * DT / 1000;
-  deg_y += gyro.data.y * DT / 1000;
-  deg_z += gyro.data.z * DT / 1000;
+  deg_x += (gyro.data.x - drift[0] - drift_2[0] ) * DT / 1000;
+  deg_y += (gyro.data.y - drift[1] - drift_2[1]) * DT / 1000;
+  deg_z += (gyro.data.z - drift[2] - drift_2[2]) * DT / 1000;
 }
 void setup()
 {
@@ -65,8 +67,8 @@ void loop()
 {
 
 
-  Serial.print("X: "); Serial.print((int)deg_x);   Serial.print(" ");
-  Serial.print("Y: "); Serial.print((int)deg_y);   Serial.print(" ");
-  Serial.print("Z: "); Serial.println((int)deg_z); Serial.print(" ");
+  Serial.print("X: "); Serial.print(deg_x);   Serial.print(" ");
+  Serial.print("Y: "); Serial.print(deg_y);   Serial.print(" ");
+  Serial.print("Z: "); Serial.println(deg_z); Serial.print(" ");
   delay(100);
 }
